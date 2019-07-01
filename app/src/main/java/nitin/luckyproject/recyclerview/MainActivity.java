@@ -1,6 +1,8 @@
 package nitin.luckyproject.recyclerview;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,14 +27,33 @@ public class MainActivity extends AppCompatActivity {
         layoutManager =new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        List<String> input = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        final List<String> input = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
             input.add("Test" + i);
         }
         mAdapter =new Adapter(input);
         recyclerView.setAdapter(mAdapter);
 
+        //Adding swipes to dismiss recyclerView
 
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
+                new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                    @Override
+                    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                        return false;
+                    }
 
+                    @Override
+                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+                        input.remove(viewHolder.getAdapterPosition());
+                        mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                    }
+                };
+
+        //call swipes functionality
+
+        ItemTouchHelper itemTouchHelper =new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 }
