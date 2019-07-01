@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,5 +57,23 @@ public class MainActivity extends AppCompatActivity {
 
         ItemTouchHelper itemTouchHelper =new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
+
+
+        //adding swipe refresh functionality
+        SwipeRefreshLayout srl =findViewById(R.id.swipe_refresh);
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(MainActivity.this, "Refreshing", Toast.LENGTH_SHORT).show();
+                updateUi();
+            }
+        });
+
+
+    }
+    public void updateUi(){
+        SwipeRefreshLayout srl =findViewById(R.id.swipe_refresh);
+        srl.setRefreshing(false);
     }
 }
